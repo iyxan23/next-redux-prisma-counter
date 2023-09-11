@@ -1,11 +1,15 @@
 "use client";
 
+import {
+  selectCounterValueA,
+  selectCounterValueB,
+} from "@/features/counter/container";
 import Link from "next/link";
 import { useAppSelector } from "./hooks";
 
 export default function Links() {
-  const a = useAppSelector((state) => state.counter.valueA);
-  const b = useAppSelector((state) => state.counter.valueB);
+  const a = useAppSelector(selectCounterValueA);
+  const b = useAppSelector(selectCounterValueB);
 
   return (
     <nav className="flex flex-col">
