@@ -6,12 +6,12 @@ export async function POST(req: NextRequest) {
   const content = await req.json();
   console.log(content);
 
-  if (Math.random() < 0.2) {
-    console.log("failing in purpose");
-    return new NextResponse(JSON.stringify({ error: "elol" }), {
-      status: 500,
-    });
-  }
+  // if (Math.random() < 0.2) {
+  //   console.log("failing in purpose");
+  //   return new NextResponse(JSON.stringify({ error: "elol" }), {
+  //     status: 500,
+  //   });
+  // }
 
   const message = await messageSchema.safeParseAsync(content);
   if (!message.success) {
