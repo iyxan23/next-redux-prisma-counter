@@ -132,6 +132,8 @@ export const counterSlice = createSlice({
         state.valueA = action.payload.amount;
       })
       .addCase(syncA.rejected, (state, action) => {
+        // the error type for rejectWithValue doesn't propagate properly
+        // this is only a workaround
         const error = action.payload as CountErrorMessageType;
         state.statusA = { type: "failed", error };
       })
@@ -140,8 +142,6 @@ export const counterSlice = createSlice({
         state.statusB = { type: "pending" };
       })
       .addCase(syncB.fulfilled, (state, action) => {
-        console.log("sync b fulfilled");
-        console.log(action);
         state.statusB = { type: "success" };
         state.valueB = action.payload.amount;
       })
