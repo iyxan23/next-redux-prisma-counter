@@ -3,7 +3,12 @@ import {
   errorMessageSchema,
   CountErrorMessageType,
 } from "@/app/api/apiSchema";
-import { combineReducers, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  combineReducers,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import undoable, { ActionCreators } from "redux-undo";
 
 // Define a type for the slice state
@@ -32,9 +37,8 @@ const initialState: CounterState = {
 
 export const syncA = createAsyncThunk(
   "counter/syncA",
-  async (amount: number, { dispatch, rejectWithValue }) => {
-    const incrementAction = incrementBByAmount(amount);
-    dispatch(incrementAction);
+  async (amount: number, { dispatch, rejectWithValue, fulfillWithValue }) => {
+    dispatch(incrementAByAmount(amount));
 
     const result = await fetch(`${window.location.origin}/api/a`, {
       method: "POST",
@@ -43,13 +47,19 @@ export const syncA = createAsyncThunk(
     });
 
     if (!result.ok) {
-      return rejectWithValue(await result.json());
+      console.log("result is not ok");
+      const error = await result
+        .json()
+        .then((json) => errorMessageSchema.parseAsync(json));
+      dispatch(ActionCreators.undo());
+      return rejectWithValue(error);
     }
 
-    const json = await result.json();
-    const msg = messageSchema.parseAsync(json);
+    const msg = await result
+      .json()
+      .then((json) => messageSchema.parseAsync(json));
 
-    return msg;
+    return fulfillWithValue(msg);
   }
 );
 
@@ -158,6 +168,9 @@ export const {
   incrementBByAmount,
 } = counterSlice.actions;
 
-const reducer = combineReducers({ undoable: undoable, counter: counterSlice.reducer })
+const reducer = combineReducers({
+  undoable: undoable,
+  counter: counterSlice.reducer,
+});
 
 export default reducer;
