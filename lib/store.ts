@@ -5,7 +5,7 @@ const store = configureStore({
   reducer: {
     counter: counterReducer,
   },
-  middleware: (gDM) => gDM(),
+  middleware: (gDM) => gDM({ serializableCheck: false }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
