@@ -1,5 +1,7 @@
 This is a playground project. A simple optimistic ui counter powered with Redux and Next.js/Prisma.
 
+Open in [CodeSandbox](https://codesandbox.io/p/sandbox/github/iyxan23/next-redux-prisma-counter/tree/main).
+
 ## Getting Started
 
 First, run the development server:
